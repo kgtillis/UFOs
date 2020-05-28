@@ -24,7 +24,7 @@ function buildTable(data) {
     });
   }
 
-// Challenge
+// Module 11 Challenge
 
 // Keep track of all filters
 var filters = {};
@@ -32,105 +32,51 @@ var filters = {};
 // This function will replace your handleClick function
 function updateFilters() {
 
-  // Save the element, value, and id of the filter that was changed
-
   // Grab values from the filters
-  let date = d3.select("#datetime").property("value");
-  let city = d3.select("#city").property("value");
-  let state = d3.select("#state").property("value");
-  let country = d3.select("#country").property("value");
-  let shape = d3.select("#shape").property("value");
-  let filteredData = tableData;
+  let filterItem = d3.select(this).select("input")
 
+  let itemKey = filterItem.attr("id")
 
+  let itemValue = filterItem.property("value")
 
-  // for element, check if there is a value, if so, then save:
+  // For element, check if there is a value, if so, then save:
   // element, value, ID of filter in dictionary. 
-
-  // input, date, #datetime
-
-
-  // If a filter value was entered then add that filterId and value
-  // to the filters list. Otherwise, clear that filter from the filters object
-
-  if (date) {
-    // Add filterID and value to filters list.
-    
-
-    filters = filters.append(variable)
-
-    // If no value, clear filter from filters object.
+  if (itemValue) {
+    // Appends/adds filter key and id
+    filters[itemKey] = itemValue
   } else {
-    filters.clear('datetime');
+    // Delete key if no value exists
+      delete filters[itemKey]
   }
 
   // Call function to apply all filters and rebuild the table
   filterTable();
 }
 
+
 function filterTable() {
 
   // Set the filteredData to the tableData
+  filteredData = tableData
 
   // Loop through all of the filters and keep any data that
-  // matches the filter values, forEach
+  // matches the filter values.
 
+  // From Luke TA :
+  // Resource: https://stackoverflow.com/questions/10654992/how-to-get-collection-of-keys-in-javascript-dictionary 
+  Object.entries(filters).forEach(([key, value]) => {
+      filteredData = filteredData.filter(row => row[key] === value);
+    });
 
   // Finally, rebuild the table using the filtered Data
   buildTable(filteredData);
 }
 
 // Attach an event to listen for changes to each filter
-// Hint: You'll need to select the event and what it is listening for within each set of parenthesis
-d3.selectAll().on();
 
-// From Luke:
-// Object.entries(filters).forEach(([key, value]) => {
-//  filteredData = filteredData.filter(row => row[key] === value);
-// });
-
-    // Object.entries(filters).forEach(({key}, {value}) => {
-   //       filteredData = filteredData.filter(row => row.key === value)
-  //  });
-  
-    // .filter(row => row.key === value)
-
-
-// Note: use Change for detecting element:
+// Note: Change for detecting element:
 // Resource: https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/change_event 
-
-// Attach an event to listen for the form button
-// d3.selectAll("#filter-btn").on("click", handleClick);
-
-
-
-
-
-
-
-// --- OLD CODE 
-  function handleClick() {
-    // Grab the datetime value from the filter
-    let date = d3.select("#datetime").property("value");
-    let filteredData = tableData;
-    
-     // Check to see if a date was entered and filter the
-    // data using that date.
-
-    if (date) {
-      // Apply `filter` to the table data to only keep the
-      // rows where the `datetime` value matches the filter value
-      filteredData = filteredData.filter(row => row.datetime === date);
-    };
-    
-     // Rebuild the table using the filtered data
-    // @NOTE: If no date was entered, then filteredData will
-    // just be the original tableData.
-    buildTable(filteredData);
-  };
-
-// Attach an event to listen for the form button
-d3.selectAll("#filter-btn").on("click", handleClick);
+d3.selectAll(".filter").on("change", updateFilters);
 
 // Build the table when the page loads
 buildTable(tableData); 
