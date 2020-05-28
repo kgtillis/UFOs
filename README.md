@@ -6,6 +6,7 @@ Given the following task to create a dynamic website using JavaScript to create 
 ## Resources
  - Javascript version ES6+
  - HTML5, CSS3 
+ - Data: data.js
 
 ## Summary
 Website created using JavaScript, HTML, and CSS to create a custom webpage that showcases the different UFO sightings around the world. 
